@@ -1,4 +1,4 @@
-package top.lvzhiqiang.test1;
+package top.lvzhiqiang.testnewapi;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.*;

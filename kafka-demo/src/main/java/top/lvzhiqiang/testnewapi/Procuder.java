@@ -1,4 +1,4 @@
-package top.lvzhiqiang.test1;
+package top.lvzhiqiang.testnewapi;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.producer.Callback;
@@ -6,6 +6,7 @@ import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.clients.producer.RecordMetadata;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Properties;
@@ -19,26 +20,18 @@ import java.util.Properties;
  **/
 @Slf4j
 public class Procuder {
-    public static void main(String[] args) {
-        Properties props = new Properties();
-        //kafka集群，broker-list
-        props.put("bootstrap.servers", "hexo.lvzhiqiang.top:9093");
-        props.put("acks", "all");
-        //重试次数
-        props.put("retries", 1);
-        //批次大小   只有数据积累到batch.size之后，sender才会发送数据
-        props.put("batch.size", 16384);
-        //等待时间   如果数据迟迟未达到batch.size，sender等待linger.time之后就会发送数据
-        props.put("linger.ms", 1);
-        //缓冲区大小
-        props.put("buffer.memory", 33554432);
-        props.put("key.serializer", "org.apache.kafka.common.serialization.StringSerializer");
-        props.put("value.serializer", "org.apache.kafka.common.serialization.StringSerializer");
-        KafkaProducer<String, String> producer = new KafkaProducer<>(props);
+    public static void main(String[] args) throws IOException {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        // 1.读取kafka生产者的配置信息
+        // 具体属性名称可参考ProducerConfig,CommonClientConfigs
+        Properties props = new Properties();
+        props.load(ClassLoader.getSystemResourceAsStream("newProducer.properties"));
+        // 2.创建producer对象
+        KafkaProducer<String, String> producer = new KafkaProducer<>(props);
+        // 3.发送数据
         for (int i = 0; i < 100; i++) {
             int finalI = i;
-            producer.send(new ProducerRecord<>("test", Integer.toString(i), Integer.toString(i)), new Callback() {
+            producer.send(new ProducerRecord<>("test", "testnewapi--" + i, Integer.toString(i)), new Callback() {
                 @Override
                 public void onCompletion(RecordMetadata recordMetadata, Exception e) {
                     if (null == e) {
@@ -49,6 +42,7 @@ public class Procuder {
                 }
             });
         }
+        // 4.关闭资源
         producer.close();
     }
 }
