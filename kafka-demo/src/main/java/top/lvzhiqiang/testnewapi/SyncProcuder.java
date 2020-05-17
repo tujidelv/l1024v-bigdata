@@ -7,18 +7,19 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Properties;
+import java.util.concurrent.ExecutionException;
 
 /**
- * @ClassName Procuder
- * @Description 异步发送API
+ * @ClassName SyncProcuder
+ * @Description 同步发送API
  * @Author zhiqiang.lv
  * @Date 2020/4/20 17:26
  * @Version 1.0
  **/
 @Slf4j
-public class Procuder {
+public class SyncProcuder {
     // 带回调函数的API
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, ExecutionException, InterruptedException {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         // 1.读取kafka生产者的配置信息 具体配置参数可参考ProducerConfig,CommonClientConfigs
         Properties props = new Properties();
@@ -43,7 +44,7 @@ public class Procuder {
                         log.error("{}", sdf.format(new Date()), e);
                     }
                 }
-            });
+            }).get();
         }
         // 4.关闭资源 会做一些资源的回收,防止没达到send的要求时数据发送不出去
         producer.close();
