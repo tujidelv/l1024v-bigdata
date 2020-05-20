@@ -9,7 +9,7 @@ import java.util.Map;
 /**
  * @author Tujide.lv
  * @version 1.0
- * @description TODO
+ * @description 自定义分区器
  * @date 2020/5/17 17:32
  */
 public class CustomPartitioner implements Partitioner {

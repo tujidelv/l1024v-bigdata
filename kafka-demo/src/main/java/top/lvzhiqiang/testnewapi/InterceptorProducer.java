@@ -5,18 +5,20 @@ import org.apache.kafka.clients.producer.*;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Properties;
 
 /**
- * @ClassName Procuder
- * @Description 异步发送API
+ * @ClassName InterceptorProducer
+ * @Description 带拦截器的producer
  * @Author zhiqiang.lv
- * @Date 2020/4/20 17:26
+ * @Date 2020/5/20 15:49
  * @Version 1.0
  **/
 @Slf4j
-public class Procuder {
+public class InterceptorProducer {
     // 带回调函数的API
     public static void main(String[] args) throws IOException {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -25,6 +27,10 @@ public class Procuder {
         props.load(ClassLoader.getSystemResourceAsStream("newProducer.properties"));
         // 1.1自定义分区器,可选
         props.put(ProducerConfig.PARTITIONER_CLASS_CONFIG, "top.lvzhiqiang.testnewapi.CustomPartitioner");
+        // 1.2自定义拦截器链,可选
+        List<String> interceptors = new ArrayList<>();
+        interceptors.add("top.lvzhiqiang.testnewapi.CustomInterceptor");
+        props.put(ProducerConfig.INTERCEPTOR_CLASSES_CONFIG, interceptors);
         // 2.创建producer对象
         KafkaProducer<String, String> producer = new KafkaProducer<>(props);
         // 3.发送数据
@@ -45,7 +51,7 @@ public class Procuder {
                 }
             });
         }
-        // 4.关闭资源 会做一些资源的回收,防止没达到send的要求时数据发送不出去
+        // 4.关闭资源 一定要关闭producer，这样才会调用interceptor的close方法
         producer.close();
     }
 }

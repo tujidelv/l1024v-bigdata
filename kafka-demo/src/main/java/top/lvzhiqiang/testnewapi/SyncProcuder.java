@@ -24,7 +24,7 @@ public class SyncProcuder {
         // 1.读取kafka生产者的配置信息 具体配置参数可参考ProducerConfig,CommonClientConfigs
         Properties props = new Properties();
         props.load(ClassLoader.getSystemResourceAsStream("newProducer.properties"));
-        // 1.1自定义分区拦截器,可选
+        // 1.1自定义分区器,可选
         props.put(ProducerConfig.PARTITIONER_CLASS_CONFIG, "top.lvzhiqiang.testnewapi.CustomPartitioner");
         // 2.创建producer对象
         KafkaProducer<String, String> producer = new KafkaProducer<>(props);
