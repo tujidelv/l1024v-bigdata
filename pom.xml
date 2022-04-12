@@ -40,7 +40,7 @@
         <flume-kafka-channel.version>1.7.0</flume-kafka-channel.version>
         <spark-core_2.11.version>2.1.1</spark-core_2.11.version>
         <hadoop-client.version>2.7.2</hadoop-client.version>
-        <hadoop-common.version>2.7.2</hadoop-common.version>
+        <hadoop-common.version>3.2.3</hadoop-common.version>
         <hadoop-hdfs.version>2.7.2</hadoop-hdfs.version>
         <hive-exec.version>1.2.1</hive-exec.version>
         <kafka-clients.version>2.3.0</kafka-clients.version>
